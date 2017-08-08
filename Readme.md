@@ -2,6 +2,14 @@
 
 Derive GO terms based on Ensembl gene- and transcript ids.
 
+## Running Roxygen
+
+Roxygen takes care of which functions and libraries are exported. To run Roxygen, execute:
+
+```r
+roxygen2::roxygenise()
+```
+
 ## Relavant Posts and Information
 
 - [How to use global variables in `R`](https://stackoverflow.com/questions/12598242/global-variables-in-packages-in-r)
