@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "# SonaR-GO Package\n\nDerive GO terms based on Ensembl gene- and transcript ids.\n\n## Relavant Posts and Information\n\n- [How to use global variables in `R`](https://stackoverflow.com/questions/12598242/global-variables-in-packages-in-r)\n- [How namespaces works](http://r-pkgs.had.co.nz/namespace.html)\n- [How Roxygen helps with namespaces](http://kbroman.org/pkg_primer/pages/depends.html)\n- [How to use Roxygen2](https://github.com/yihui/roxygen2)\n",
+    "created" : 1502198054229.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3232290405",
+    "id" : "1CB4763D",
+    "lastKnownWriteTime" : 1502198232,
+    "last_content_update" : 1502198232900,
+    "path" : "~/Workshop/MPI/MPI-MR-Projects/SONAR/app/sona-R/sonaRGO/Readme.md",
+    "project_path" : "Readme.md",
+    "properties" : {
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "markdown"
+}
