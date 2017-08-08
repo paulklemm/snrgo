@@ -8,6 +8,16 @@ Currently the package is locked to the last set ensembl dataset of the latest re
 
 To fix this, the `get_go` function should also include a dataset as well as ensembl release parameter. If not available, the package downloads the data frames using the `biomaRt` package and stores them in the package folder.
 
+### Implementation
+
+Get folder in `R` package:
+
+```r
+system.file("R", package="sonaRGO")
+```
+
+First draft in `get_ensembl_dataset`.
+
 - [How to add data to `R` packages](http://www.davekleinschmidt.com/r-packages/)
 
 ## Running Roxygen

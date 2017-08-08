@@ -2,6 +2,30 @@
 #   Check Package:             'Cmd + Shift + E'
 #   Test Package:              'Cmd + Shift + T'
 
+get_ensembl_dataset <- function(ensembl_dataset='mmusculus_gene_ensembl', version='current') {
+  # Check if the ensembl folder exists
+  if (system.file("ensembl", package="sonaRGO") == '')
+    dir.create(file.path(path.package('sonaRGO'), 'ensembl'))
+
+  if (version == 'current') {
+    # Get the current game version
+    version <- regmatches(listEnsembl()$version[1], regexpr("([0-9]*$)", listEnsembl()$version[1]))
+  }
+
+  # Construct file name
+  ensembl_path <- file.path(path.package('sonaRGO'), 'ensembl', paste0(ensembl_dataset, '_', version, '.rdmp'))
+  # Check if the file exists
+  if (!file.exists(ensembl_path)) {
+    # Get the biomart
+    ensembl <- useEnsembl(biomart="ensembl", dataset=ensembl_dataset, version=version)
+    gene_and_go <- getBM(attributes=c('ensembl_gene_id', 'go_id'), mart = ensembl)
+    save(gene_and_go, file = ensembl_path)
+  } else {
+    load(file = ensembl_path)
+  }
+  # TODO return the stuff
+}
+
 #' @title Set Ensembl dataset for the package
 #'
 #' @param ensembl_dataset Ensembl dataset name
