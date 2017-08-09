@@ -2,8 +2,30 @@
 #   Check Package:             'Cmd + Shift + E'
 #   Test Package:              'Cmd + Shift + T'
 
-debug <- FALSE
+debug <- TRUE
+# Set debug path to downloads because rebuilding the package will delete the ensembl files in its folder
 debug_path <- '~/Downloads/ensembl'
+
+count_go_terms <- function(gene_and_go, transcript_and_go) {
+  # Process genes and select only required columns
+  gene_and_go_select <- gene_and_go %>% select(ensembl_gene_id, go_id)
+  # Iterate over all go ids
+  go_id_name <- c()
+  go_id_count <- c()
+  for (current_go_id in unique(gene_and_go_select$go_id)) {
+    # If go_id is empty skip this one
+    if (current_go_id == '')
+      next
+    # Filter for current go_id
+    current_count <- gene_and_go_select %>% filter(go_id == current_go_id) %>% unique(x = .$ensembl_gene_id) %>% data.frame() %>% nrow()
+    # Add the result to the arrays
+    go_id_name <- c(go_id_name, current_go_id)
+    go_id_count <- c(go_id_count, current_count)
+  }
+  # Attach to the original data frame
+  gene_and_go <- gene_and_go %>% left_join(data.frame(go_id = go_id_name, count = go_id_count))
+  return(gene_and_go)
+}
 
 get_ensembl_dataset <- function(ensembl_dataset='mmusculus_gene_ensembl', version='current') {
   # Check if the ensembl folder exists
@@ -24,7 +46,9 @@ get_ensembl_dataset <- function(ensembl_dataset='mmusculus_gene_ensembl', versio
   if (!file.exists(ensembl_path)) {
     # Get the biomart
     ensembl <- useEnsembl(biomart="ensembl", dataset=ensembl_dataset, version=version)
-    gene_and_go <- getBM(attributes=c('ensembl_gene_id', 'go_id'), mart = ensembl)
+    gene_and_go <- getBM(attributes=c('ensembl_gene_id', 'go_id', 'name_1006', 'definition_1006', 'namespace_1003'), mart = ensembl)
+    # Fix the dimension names to be expressive
+    colnames(gene_and_go) <- c('ensembl_gene_id', 'go_id', 'go_term_name', 'go_term_definition', 'go_domain')
     save(gene_and_go, file = ensembl_path)
   } else {
     load(file = ensembl_path)
