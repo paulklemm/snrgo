@@ -4,10 +4,14 @@
 \alias{to_go}
 \title{Get the GO term association per gene or transcript as list}
 \usage{
-to_go(input)
+to_go(input, ensembl_dataset, ensembl_version = "current")
 }
 \arguments{
 \item{input}{Vector of Ensembl gene or transcript ids}
+
+\item{ensembl_dataset}{Ensembl dataset name specifying the species}
+
+\item{ensembl_version}{Ensembl version. Defaults to 'current'}
 }
 \value{
 List named by gene/transcript id containing a vector of associated GO terms by accession id

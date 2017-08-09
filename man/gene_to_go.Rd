@@ -4,10 +4,12 @@
 \alias{gene_to_go}
 \title{Get the GO term association per gene as list}
 \usage{
-gene_to_go(genes)
+gene_to_go(genes, gene_and_go)
 }
 \arguments{
 \item{genes}{Vector of Ensembl gene names}
+
+\item{gene_and_go}{Data frame containing gene ids and go accession ids}
 }
 \value{
 List named by gene id containing a vector of associated GO terms by accession id
