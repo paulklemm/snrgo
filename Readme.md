@@ -2,6 +2,14 @@
 
 Derive GO terms based on Ensembl gene- and transcript ids.
 
+## GO Term Ids
+
+The Biomart IDs for GO terms are in parts obscure. Here a translation.
+
+- `name_1006`: "GO term name"
+- `definition_1006`: "GO term definition"
+- `namespace_1003`: "GO domain"
+
 ## Running Roxygen
 
 Roxygen takes care of which functions and libraries are exported. To run Roxygen, execute:
