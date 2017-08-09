@@ -27,33 +27,64 @@ count_go_terms <- function(gene_and_go, transcript_and_go) {
   return(gene_and_go)
 }
 
-get_ensembl_dataset <- function(ensembl_dataset='mmusculus_gene_ensembl', version='current') {
+#' The data frames are stored in individual folders to make loading more efficient
+#' @param type Ensembl data to return. Has to be `gene_to_go`, `transcripts_to_go` or `go_description`
+get_ensembl_data <- function(type='gene_to_go', ensembl_dataset='mmusculus_gene_ensembl', version='current') {
   # Check if the ensembl folder exists
   if (system.file("ensembl", package="sonaRGO") == '')
     dir.create(file.path(path.package('sonaRGO'), 'ensembl'))
 
   if (version == 'current') {
-    # Get the current game version
+    # Get the current ensembl version
     version <- regmatches(listEnsembl()$version[1], regexpr("([0-9]*$)", listEnsembl()$version[1]))
   }
 
-  # Construct file name
-  if (debug)
-    ensembl_path <- file.path(debug_path, paste0(ensembl_dataset, '_', version, '.rdmp'))
-  else
-    ensembl_path <- file.path(path.package('sonaRGO'), 'ensembl', paste0(ensembl_dataset, '_', version, '.rdmp'))
-  # Check if the file exists
-  if (!file.exists(ensembl_path)) {
+  # Construct file names
+  if (debug) {
+    ensembl_path_genes <- file.path('~/Downloads', 'ensembl', paste0(ensembl_dataset, '_', version, '_genes.RData'))
+    ensembl_path_transcripts <- file.path('~/Downloads', 'ensembl', paste0(ensembl_dataset, '_', version, '_transcripts.RData'))
+    ensembl_path_go <- file.path('~/Downloads', 'ensembl', paste0(ensembl_dataset, '_', version, '_go.RData'))
+  } else {
+    ensembl_path_genes <- file.path(path.package('sonaRGO'), 'ensembl', paste0(ensembl_dataset, '_', version, '_genes.RData'))
+    ensembl_path_transcripts <- file.path(path.package('sonaRGO'), 'ensembl', paste0(ensembl_dataset, '_', version, '_transcripts.RData'))
+    ensembl_path_go <- file.path(path.package('sonaRGO'), 'ensembl', paste0(ensembl_dataset, '_', version, '_go.RData'))
+  }
+
+  # If any of the files do not exist, download all of them again
+  if (!file.exists(ensembl_path_genes) || !file.exists(ensembl_path_transcripts) || !file.exists(ensembl_path_go)) {
     # Get the biomart
     ensembl <- useEnsembl(biomart="ensembl", dataset=ensembl_dataset, version=version)
-    gene_and_go <- getBM(attributes=c('ensembl_gene_id', 'go_id', 'name_1006', 'definition_1006', 'namespace_1003'), mart = ensembl)
+    # Genes
+    gene_and_go <- getBM(attributes=c('ensembl_gene_id', 'go_id'), mart = ensembl)
+    # Transcripts
+    transcript_and_go <- getBM(attributes=c('ensembl_transcript_id', 'go_id'), mart = ensembl)
+    # GO-Terms
+    go_description <- getBM(attributes=c('go_id', 'name_1006', 'definition_1006', 'namespace_1003'), mart = ensembl)
     # Fix the dimension names to be expressive
-    colnames(gene_and_go) <- c('ensembl_gene_id', 'go_id', 'go_term_name', 'go_term_definition', 'go_domain')
-    save(gene_and_go, file = ensembl_path)
-  } else {
-    load(file = ensembl_path)
+    colnames(go_description) <- c('go_id', 'go_term_name', 'go_term_definition', 'go_domain')
+    # Only include GO-Terms that are in the transcript table. This will likely not reduce the number of GO terms at all but doesn't hurt either
+    go_description <- go_description %>% filter(go_id %in% unique(transcript_and_go$go_id)) %>% nrow()
+
+    # Save the files
+    save(gene_and_go, file = ensembl_path_genes)
+    save(transcript_and_go, file = ensembl_path_transcripts)
+    save(go_description, file = ensembl_path_go)
   }
-  return(list(gene_and_go = gene_and_go))
+
+  # Return the requested frame
+  if (type == gene_and_go) {
+    load(ensembl_path_genes)
+    return(gene_and_go)
+  } else if (type == transcript_and_go) {
+    load(ensembl_path_transcripts)
+    return(transcript_and_go)
+  } else if (type == transcript_and_go) {
+    load(ensembl_path_go)
+    return(go_description)
+  } else {
+    # Fail
+    stop(paste0('Invalid option ', type, ". Choose `gene_to_go`, `transcripts_to_go` or `go_description`"))
+  }
 }
 
 #' @title Get the GO term association per gene or transcript as list
@@ -65,15 +96,14 @@ get_ensembl_dataset <- function(ensembl_dataset='mmusculus_gene_ensembl', versio
 #' @example to_go(c("ENSMUSG00000064370", "ENSMUSG00000065947"), 'mmusculus_gene_ensembl')
 #' @export
 to_go <- function(input, ensembl_dataset, ensembl_version = 'current') {
-  # Get the required data frames
-  ensembl_go_data <- get_ensembl_dataset(ensembl_dataset = ensembl_dataset, version = ensembl_version)
-  gene_and_go <- ensembl_go_data$gene_and_go
   # Convert input to uppercase
   input <- toupper(input)
   # Try to guess whether input is genes or transcripts
   # Ensembl Genes end with `G` followed by the id number, transcripts with a `t`, e.g. 'ENSMUSG00000064370'
   if (sum(grepl('(G[0-9]*$)', input)) == length(input)) {
     # Process as Genes
+    # Get the required data frames
+    gene_and_go <- get_ensembl_data('gene_and_go', ensembl_dataset = ensembl_dataset, version = ensembl_version)
     return(gene_to_go(input, gene_and_go))
   } else if (sum(grepl('(T[0-9]*$)', input)) == length(input)) {
     # TODO
