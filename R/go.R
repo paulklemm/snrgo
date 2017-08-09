@@ -12,6 +12,9 @@ debug_path <- '~/Downloads/ensembl'
 #'   `go_frame`: colnames(c(ensembl_id, go_id))
 #'   `go_description`: colnames(go_id)
 #' The function iterates over all elements in `go_frame` and counts how many elements are present for each `go_id`
+#' @param go_frame Frame with layout `colnames(c(ensembl_id, go_id))`
+#' @param go_description Go description frame containing at least `colnames(go_id)`
+#' @return go_description frame with new `count` column containing the quantity of each unique `ensembl_id` in `go_id`
 count_go_terms <- function(go_frame, go_description) {
   # Process genes and select only required columns
   go_frame_selected <- go_frame %>% select(ensembl_id, go_id)
