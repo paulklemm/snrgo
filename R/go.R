@@ -2,34 +2,47 @@
 #   Check Package:             'Cmd + Shift + E'
 #   Test Package:              'Cmd + Shift + T'
 
-debug <- TRUE
+debug <- FALSE
 # Set debug path to downloads because rebuilding the package will delete the ensembl files in its folder
 debug_path <- '~/Downloads/ensembl'
 
-count_go_terms <- function(gene_and_go, transcript_and_go) {
+#' Quantify GO terms based on data frame containing ensembl ids.
+#'
+#' Requires a data frame in the following format
+#'   `go_frame`: colnames(c(ensembl_id, go_id))
+#'   `go_description`: colnames(go_id)
+#' The function iterates over all elements in `go_frame` and counts how many elements are present for each `go_id`
+count_go_terms <- function(go_frame, go_description) {
   # Process genes and select only required columns
-  gene_and_go_select <- gene_and_go %>% select(ensembl_gene_id, go_id)
+  go_frame_selected <- go_frame %>% select(ensembl_id, go_id)
   # Iterate over all go ids
   go_id_name <- c()
   go_id_count <- c()
-  for (current_go_id in unique(gene_and_go_select$go_id)) {
+  for (current_go_id in unique(go_frame_selected$go_id)) {
     # If go_id is empty skip this one
     if (current_go_id == '')
       next
     # Filter for current go_id
-    current_count <- gene_and_go_select %>% filter(go_id == current_go_id) %>% unique(x = .$ensembl_gene_id) %>% data.frame() %>% nrow()
+    current_count <- go_frame_selected %>% filter(go_id == current_go_id) %>% unique(x = .$ensembl_id) %>% data.frame() %>% nrow()
     # Add the result to the arrays
     go_id_name <- c(go_id_name, current_go_id)
     go_id_count <- c(go_id_count, current_count)
   }
   # Attach to the original data frame
-  gene_and_go <- gene_and_go %>% left_join(data.frame(go_id = go_id_name, count = go_id_count))
-  return(gene_and_go)
+  go_description <- go_description %>% left_join(data.frame(go_id = go_id_name, count = go_id_count))
+  return(go_description)
 }
 
+#' Get the ensembl data frame requested by 'type'.
+#'
+#' Since the download requires some minutes, files are cached in the installation folder of the package.
+#' Therefore, loading a gene dataset can take some time when done for the first time.
 #' The data frames are stored in individual folders to make loading more efficient
-#' @param type Ensembl data to return. Has to be `gene_to_go`, `transcripts_to_go` or `go_description`
-get_ensembl_data <- function(type='gene_to_go', ensembl_dataset='mmusculus_gene_ensembl', version='current') {
+#' @param type Ensembl data to return. Has to be `gene_and_go`, `transcripts_and_go` or `go_description`
+#' @param ensembl_dataset Ensembl dataset name specifying the species
+#' @param ensembl_version Ensembl version. Defaults to 'current'
+#' @return Dataframe reqested by type
+get_ensembl_data <- function(type='gene_and_go', ensembl_dataset='mmusculus_gene_ensembl', version='current') {
   # Check if the ensembl folder exists
   if (system.file("ensembl", package="sonaRGO") == '')
     dir.create(file.path(path.package('sonaRGO'), 'ensembl'))
@@ -63,7 +76,14 @@ get_ensembl_data <- function(type='gene_to_go', ensembl_dataset='mmusculus_gene_
     # Fix the dimension names to be expressive
     colnames(go_description) <- c('go_id', 'go_term_name', 'go_term_definition', 'go_domain')
     # Only include GO-Terms that are in the transcript table. This will likely not reduce the number of GO terms at all but doesn't hurt either
-    go_description <- go_description %>% filter(go_id %in% unique(transcript_and_go$go_id)) %>% nrow()
+    go_description <- go_description %>% filter(go_id %in% unique(transcript_and_go$go_id))
+    # Replace empty entries with NA
+    go_description[go_description == ""] <- NA
+    # Remove rows where there are only NAs. This counts the number of NAs in each row and if the sum equals number of cols, the row is removed
+    go_description <- go_description[rowSums(is.na(go_description[1:nrow(go_description),])) != ncol(go_description),]
+    # Add gene counts to go description
+    go_description <- count_go_terms(go_frame = gene_and_go %>% mutate(ensembl_id = ensembl_gene_id), go_description = go_description) %>% rename(count_genes = count)
+    go_description <- count_go_terms(go_frame = transcript_and_go %>% mutate(ensembl_id = ensembl_transcript_id), go_description = go_description) %>% rename(count_transcripts = count)
 
     # Save the files
     save(gene_and_go, file = ensembl_path_genes)
@@ -72,18 +92,18 @@ get_ensembl_data <- function(type='gene_to_go', ensembl_dataset='mmusculus_gene_
   }
 
   # Return the requested frame
-  if (type == gene_and_go) {
+  if (type == "gene_and_go") {
     load(ensembl_path_genes)
     return(gene_and_go)
-  } else if (type == transcript_and_go) {
+  } else if (type == "transcript_and_go") {
     load(ensembl_path_transcripts)
     return(transcript_and_go)
-  } else if (type == transcript_and_go) {
+  } else if (type == "go_description") {
     load(ensembl_path_go)
     return(go_description)
   } else {
     # Fail
-    stop(paste0('Invalid option ', type, ". Choose `gene_to_go`, `transcripts_to_go` or `go_description`"))
+    stop(paste0('Invalid option ', type, ". Choose `gene_and_go`, `transcripts_and_go` or `go_description`"))
   }
 }
 
