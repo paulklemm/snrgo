@@ -32,18 +32,6 @@ get_ensembl_dataset <- function(ensembl_dataset='mmusculus_gene_ensembl', versio
   return(list(gene_and_go = gene_and_go))
 }
 
-#' @title Set Ensembl dataset for the package
-#'
-#' @param ensembl_dataset Ensembl dataset name
-#' @export
-set_ensembl_dataset <- function(ensembl_dataset) {
-  pkg.env <<- new.env()
-  pkg.env$dataset <- ensembl_dataset
-  pkg.env$ensembl <- useMart("ensembl",dataset=pkg.env$dataset)
-  pkg.env$gene_and_go <- getBM(attributes=c('ensembl_gene_id', 'go_id'), mart = pkg.env$ensembl)
-  # pkg.env$transcript_to_go <- getBM(attributes=c('ensembl_transcript_id', 'go_id'), mart = pkg.env$ensembl)
-}
-
 #' @title Get the GO term association per gene or transcript as list
 #'
 #' @param input Vector of Ensembl gene or transcript ids
@@ -76,6 +64,7 @@ to_go <- function(input, ensembl_dataset, ensembl_version = 'current') {
 #' @import biomaRt
 #' @import dplyr
 #' @param genes Vector of Ensembl gene names
+#' @param gene_and_go Data frame containing gene ids and go accession ids
 #' @return List named by gene id containing a vector of associated GO terms by accession id
 gene_to_go <- function(genes, gene_and_go) {
   # Populate result
@@ -85,6 +74,3 @@ gene_to_go <- function(genes, gene_and_go) {
   }
   return(result)
 }
-
-# Set default environment to mouse genes
-# set_ensembl_dataset('mmusculus_gene_ensembl')
