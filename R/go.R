@@ -67,7 +67,7 @@ get_ensembl_data <- function(type='gene_and_go', ensembl_dataset='mmusculus_gene
   }
 
   # If any of the files do not exist, download all of them again
-  if (!file.exists(ensembl_path_genes) || !file.exists(ensembl_path_transcripts) || !file.exists(ensembl_path_go)) {
+  if (!file.exists(ensembl_path_genes) || !file.exists(ensembl_path_transcripts) || !file.exists(ensembl_path_go)) {
     # Get the biomart
     ensembl <- useEnsembl(biomart="ensembl", dataset=ensembl_dataset, version=version)
     # Genes
