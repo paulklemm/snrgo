@@ -126,7 +126,8 @@ get_go_summary <- function(ensembl_dataset='mmusculus_gene_ensembl', ensembl_ver
 #' @param ensembl_dataset Ensembl dataset name specifying the species
 #' @param ensembl_version Ensembl version. Defaults to 'current'
 #' @return List named by gene/transcript id containing a vector of associated GO terms by accession id
-#' @example to_go(c("ENSMUSG00000064370", "ENSMUSG00000065947"), 'mmusculus_gene_ensembl')
+#' @examples
+#' to_go(c("ENSMUSG00000064370", "ENSMUSG00000065947"), 'mmusculus_gene_ensembl')
 #' @export
 to_go <- function(input, ensembl_dataset, ensembl_version = 'current') {
   # Convert input to uppercase

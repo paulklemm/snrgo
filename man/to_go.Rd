@@ -16,3 +16,6 @@ to_go(input, ensembl_dataset, ensembl_version = "current")
 \value{
 List named by gene/transcript id containing a vector of associated GO terms by accession id
 }
+\examples{
+to_go(c("ENSMUSG00000064370", "ENSMUSG00000065947"), 'mmusculus_gene_ensembl')
+}
