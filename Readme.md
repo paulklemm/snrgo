@@ -10,6 +10,12 @@ Get GO terms for a selection of Ensembl genes:
 to_go(c("ENSMUSG00000064370", "ENSMUSG00000065947"), 'mmusculus_gene_ensembl')
 ```
 
+## Remarks on File Buffering of `get_go_summary`
+
+The `get_go_summary` function takes some minutes to complete as it downloads the GO terms for all genes. Therefore the result of these queries are stored locally to make future queries faster by reading the results from disk.
+
+Therefore the first time the command is called it will take some time to install. The intermediate files are stored in the package installation folder, e.g. `/usr/local/lib/opencpu/site-library/sonaRGO/ensembl`.
+
 ## GO Term Ids
 
 The Biomart IDs for GO terms are in parts obscure. Here a translation.
