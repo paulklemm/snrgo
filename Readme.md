@@ -32,3 +32,16 @@ roxygen2::roxygenise()
 - [How namespaces works](http://r-pkgs.had.co.nz/namespace.html)
 - [How Roxygen helps with namespaces](http://kbroman.org/pkg_primer/pages/depends.html)
 - [How to use Roxygen2](https://github.com/yihui/roxygen2)
+
+# Git Setup
+
+This repo knows two origins:
+
+```bash
+# From https://stackoverflow.com/questions/14290113/git-pushing-code-to-two-remotes
+git remote set-url --add --push origin git@github.com:paulklemm/snrgo.git
+git remote set-url --add --push origin git@github.sf.mpg.de:pklemm/sonargo.git
+# Check with `git remote show origin`
+```
+
+This is neccessary since the `R` devtools allow for easy installation of packages on Github.com.
