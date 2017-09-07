@@ -1,4 +1,4 @@
-# SonaR-GO Package
+# SNR-GO Package
 
 Derive GO terms based on Ensembl gene- and transcript ids.
 
@@ -26,12 +26,23 @@ Roxygen takes care of which functions and libraries are exported. To run Roxygen
 roxygen2::roxygenise()
 ```
 
+## Bioconductor Dependency
+
+SNR-GO depends on a couple of Bioconductor packages. In order to install them, Bioconductor needs to be added to the available repositories using `setRepositories(ind=c(1,2))`.
+
+So to install it, you can do:
+
+```bash
+RUN Rscript -e "setRepositories(ind=c(1,2)); devtools::install_github('paulklemm/snrgo')"
+```
+
 ## Relavant Posts and Information
 
 - [How to use global variables in `R`](https://stackoverflow.com/questions/12598242/global-variables-in-packages-in-r)
 - [How namespaces works](http://r-pkgs.had.co.nz/namespace.html)
 - [How Roxygen helps with namespaces](http://kbroman.org/pkg_primer/pages/depends.html)
 - [How to use Roxygen2](https://github.com/yihui/roxygen2)
+- [R package with CRAN and Bioconductor dependencies](https://stackoverflow.com/questions/34617306/r-package-with-cran-and-bioconductor-dependencies)
 
 # Git Setup
 
