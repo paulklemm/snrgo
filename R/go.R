@@ -2,7 +2,7 @@
 #   Check Package:             'Cmd + Shift + E'
 #   Test Package:              'Cmd + Shift + T'
 
-debug <- FALSE
+debug <- TRUE
 # Set debug path to downloads because rebuilding the package will delete the ensembl files in its folder
 debug_path <- '~/Downloads/ensembl'
 
@@ -57,9 +57,10 @@ get_ensembl_data <- function(type='gene_and_go', ensembl_dataset='mmusculus_gene
 
   # Construct file names
   if (debug) {
-    ensembl_path_genes <- file.path('~/Downloads', 'ensembl', paste0(ensembl_dataset, '_', version, '_genes.RData'))
-    ensembl_path_transcripts <- file.path('~/Downloads', 'ensembl', paste0(ensembl_dataset, '_', version, '_transcripts.RData'))
-    ensembl_path_go <- file.path('~/Downloads', 'ensembl', paste0(ensembl_dataset, '_', version, '_go.RData'))
+    dir.create(debug_path, recursive = TRUE)
+    ensembl_path_genes <- file.path(debug_path, paste0(ensembl_dataset, '_', version, '_genes.RData'))
+    ensembl_path_transcripts <- file.path(debug_path, paste0(ensembl_dataset, '_', version, '_transcripts.RData'))
+    ensembl_path_go <- file.path(debug_path, paste0(ensembl_dataset, '_', version, '_go.RData'))
   } else {
     ensembl_path_genes <- file.path(path.package('sonaRGO'), 'ensembl', paste0(ensembl_dataset, '_', version, '_genes.RData'))
     ensembl_path_transcripts <- file.path(path.package('sonaRGO'), 'ensembl', paste0(ensembl_dataset, '_', version, '_transcripts.RData'))
@@ -117,7 +118,7 @@ get_ensembl_data <- function(type='gene_and_go', ensembl_dataset='mmusculus_gene
 #' @return Summary table
 #' @export
 get_go_summary <- function(ensembl_dataset='mmusculus_gene_ensembl', ensembl_version='current') {
-  return (get_ensembl_data('go_description', ensembl_dataset = ensembl_dataset, version = ensembl_version))
+  get_ensembl_data('go_description', ensembl_dataset = ensembl_dataset, version = ensembl_version) %>% as.list() %>% return()
 }
 
 #' @title Get the GO term association per gene or transcript as list
