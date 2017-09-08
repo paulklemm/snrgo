@@ -16,6 +16,25 @@ The `get_go_summary` function takes some minutes to complete as it downloads the
 
 Therefore the first time the command is called it will take some time to install. The intermediate files are stored in the package installation folder, e.g. `/usr/local/lib/opencpu/site-library/sonaRGO/ensembl`.
 
+**BUG IN `get_go_summary`**
+
+When the temporary files are created as result of a OpenCPU call, the buffer files are created as part of the session and are *not* stored in the local file system. See here the output for example. This needs to be fixed!
+
+```
+/ocpu/tmp/x00f4253126/R/get_go_summary
+/ocpu/tmp/x00f4253126/R/.val
+/ocpu/tmp/x00f4253126/messages
+/ocpu/tmp/x00f4253126/stdout
+/ocpu/tmp/x00f4253126/warnings
+/ocpu/tmp/x00f4253126/source
+/ocpu/tmp/x00f4253126/console
+/ocpu/tmp/x00f4253126/info
+/ocpu/tmp/x00f4253126/files/DESCRIPTION
+/ocpu/tmp/x00f4253126/files/~/Downloads/ensembl/mmusculus_gene_ensembl_90_genes.RData
+/ocpu/tmp/x00f4253126/files/~/Downloads/ensembl/mmusculus_gene_ensembl_90_go.RData
+/ocpu/tmp/x00f4253126/files/~/Downloads/ensembl/mmusculus_gene_ensembl_90_transcripts.RData
+```
+
 ## GO Term Ids
 
 The Biomart IDs for GO terms are in parts obscure. Here a translation.
