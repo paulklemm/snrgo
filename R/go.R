@@ -4,7 +4,7 @@
 
 debug <- TRUE
 # Set debug path to downloads because rebuilding the package will delete the ensembl files in its folder
-debug_path <- '~/Downloads/ensembl'
+debug_path <- '/usr/local/var/ensembl'
 
 #' Quantify GO terms based on data frame containing ensembl ids.
 #'
