@@ -118,7 +118,9 @@ get_ensembl_data <- function(type='gene_and_go', ensembl_dataset='mmusculus_gene
 #' @return Summary table
 #' @export
 get_go_summary <- function(ensembl_dataset='mmusculus_gene_ensembl', ensembl_version='current') {
-  return(get_ensembl_data('go_description', ensembl_dataset = ensembl_dataset, version = ensembl_version))
+  get_ensembl_data('go_description', ensembl_dataset = ensembl_dataset, version = ensembl_version) %>%
+    # as.list() %>%
+    return()
 }
 
 #' @title Get the GO term association per gene or transcript as list
