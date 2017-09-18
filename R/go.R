@@ -123,6 +123,16 @@ get_go_summary <- function(ensembl_dataset='mmusculus_gene_ensembl', ensembl_ver
     return()
 }
 
+#' Export the gene_and_go table where each gene is mapped to a corresponding GO term
+#'
+#' @param ensembl_dataset Ensembl dataset name specifying the species
+#' @param ensembl_version Ensembl version. Defaults to 'current'
+#' @export
+get_go_per_gene <- function(ensembl_dataset='mmusculus_gene_ensembl', ensembl_version='current') {
+  get_ensembl_data('gene_and_go', ensembl_dataset = ensembl_dataset, version = ensembl_version) %>%
+    return()
+}
+
 #' @title Get the GO term association per gene or transcript as list
 #'
 #' @param input Vector of Ensembl gene or transcript ids
