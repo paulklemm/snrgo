@@ -37,7 +37,7 @@ When the temporary files are created as result of a OpenCPU call, the buffer fil
 
 **Temporary Workaround**
 
-Run `get_go_summary()` from the RStudio session of the docker image to create the temporary file.
+Run `get_go_summary()` from the RStudio session of the docker image to create the temporary file. This is currently done automatically in the dockerfile, see [https://github.sf.mpg.de/pklemm/snr-docker/commit/c8a3a184783400d80bad0be1b655d269f7f80eb6](https://github.sf.mpg.de/pklemm/snr-docker/commit/c8a3a184783400d80bad0be1b655d269f7f80eb6) for details
 
 **How to FIX**
 
