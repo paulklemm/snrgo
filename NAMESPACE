@@ -2,6 +2,7 @@
 
 export(get_go_per_gene)
 export(get_go_summary)
+export(testScript)
 export(to_go)
 import(biomaRt)
 import(dplyr)

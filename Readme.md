@@ -39,6 +39,10 @@ When the temporary files are created as result of a OpenCPU call, the buffer fil
 
 Run `get_go_summary()` from the RStudio session of the docker image to create the temporary file.
 
+**How to FIX**
+
+Save the OpenCPU result using a shell script to disk, as described using the function `testScript` calling the `testScript.sh` function.
+
 ## GO Term Ids
 
 The Biomart IDs for GO terms are in parts obscure. Here a translation.

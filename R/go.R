@@ -36,6 +36,13 @@ count_go_terms <- function(go_frame, go_description) {
   return(go_description)
 }
 
+#' @export
+testScript <- function() {
+  #setwd("/home/opencpu/sonar/sonaR/sonaRGO")
+  test <- system(command = './testScript.sh', wait = TRUE)
+  print(test)
+}
+
 #' Get the ensembl data frame requested by 'type'.
 #'
 #' Since the download requires some minutes, files are cached in the installation folder of the package.
