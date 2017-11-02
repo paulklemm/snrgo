@@ -35,6 +35,10 @@ When the temporary files are created as result of a OpenCPU call, the buffer fil
 /ocpu/tmp/x00f4253126/files/~/Downloads/ensembl/mmusculus_gene_ensembl_90_transcripts.RData
 ```
 
+**Temporary Workaround**
+
+Run `get_go_summary()` from the RStudio session of the docker image to create the temporary file.
+
 ## GO Term Ids
 
 The Biomart IDs for GO terms are in parts obscure. Here a translation.
