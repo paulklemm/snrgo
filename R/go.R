@@ -43,6 +43,16 @@ testScript <- function() {
   print(test)
 }
 
+#' Get the current biomaRt version
+#'
+#' @export
+#' @import biomaRt
+#' @return Biomart version
+get_current_biomart_version <- function() {
+  version <- regmatches(listEnsembl()$version[1], regexpr("([0-9]*$)", listEnsembl()$version[1]))
+  return(version)
+}
+
 #' Get the ensembl data frame requested by 'type'.
 #'
 #' Since the download requires some minutes, files are cached in the installation folder of the package.
@@ -59,7 +69,7 @@ get_ensembl_data <- function(type='gene_and_go', ensembl_dataset='mmusculus_gene
 
   if (version == 'current') {
     # Get the current ensembl version
-    version <- regmatches(listEnsembl()$version[1], regexpr("([0-9]*$)", listEnsembl()$version[1]))
+    version <- get_current_biomart_version()
   }
 
   # Construct file names
