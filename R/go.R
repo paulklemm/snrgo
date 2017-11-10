@@ -43,12 +43,12 @@ testScript <- function() {
   print(test)
 }
 
-#' Get the current biomaRt version
+#' Get the current Ensembl version
 #'
 #' @export
 #' @import biomaRt
-#' @return Biomart version
-get_current_biomart_version <- function() {
+#' @return Ensembl version
+get_current_ensembl_version <- function() {
   version <- regmatches(listEnsembl()$version[1], regexpr("([0-9]*$)", listEnsembl()$version[1]))
   return(version)
 }
@@ -69,7 +69,7 @@ get_ensembl_data <- function(type='gene_and_go', ensembl_dataset='mmusculus_gene
 
   if (version == 'current') {
     # Get the current ensembl version
-    version <- get_current_biomart_version()
+    version <- get_current_ensembl_version()
   }
 
   # Construct file names
