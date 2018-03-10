@@ -49,9 +49,9 @@ testScript <- function() {
 #' @import biomaRt
 #' @return Ensembl version
 get_current_ensembl_version <- function() {
+  version <- regmatches(listEnsembl()$version[1], regexpr("([0-9]*$)", listEnsembl()$version[1]))
   # Hack for new Version that is not available yet!
-  #version <- regmatches(listEnsembl()$version[1], regexpr("([0-9]*$)", listEnsembl()$version[1]))
-  version <- "90"
+  #version <- "90"
   return(version)
 }
 
