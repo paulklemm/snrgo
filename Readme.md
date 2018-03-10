@@ -1,5 +1,18 @@
 # SNR-GO Package
 
+<!-- TOC -->
+
+* [SNR-GO Package](#snr-go-package)
+  * [Sample Usage](#sample-usage)
+  * [Remarks on File Buffering of `get_go_summary`](#remarks-on-file-buffering-of-get_go_summary)
+  * [GO Term Ids](#go-term-ids)
+  * [Running Roxygen](#running-roxygen)
+  * [Bioconductor Dependency](#bioconductor-dependency)
+  * [Relavant Posts and Information](#relavant-posts-and-information)
+  * [Git Setup](#git-setup)
+
+<!-- /TOC -->
+
 Derive GO terms based on Ensembl gene- and transcript ids.
 
 ## Sample Usage
@@ -18,7 +31,7 @@ Therefore the first time the command is called it will take some time to install
 
 **BUG IN `get_go_summary`**
 
-When the temporary files are created as result of a OpenCPU call, the buffer files are created as part of the session and are *not* stored in the local file system. See here the output for example. This needs to be fixed!
+When the temporary files are created as result of a OpenCPU call, the buffer files are created as part of the session and are _not_ stored in the local file system. See here the output for example. This needs to be fixed!
 
 ```
 /ocpu/tmp/x00f4253126/R/get_go_summary
@@ -47,9 +60,9 @@ Save the OpenCPU result using a shell script to disk, as described using the fun
 
 The Biomart IDs for GO terms are in parts obscure. Here a translation.
 
-- `name_1006`: "GO term name"
-- `definition_1006`: "GO term definition"
-- `namespace_1003`: "GO domain"
+* `name_1006`: "GO term name"
+* `definition_1006`: "GO term definition"
+* `namespace_1003`: "GO domain"
 
 ## Running Roxygen
 
@@ -71,21 +84,19 @@ RUN Rscript -e "setRepositories(ind=c(1,2)); devtools::install_github('paulklemm
 
 ## Relavant Posts and Information
 
-- [How to use global variables in `R`](https://stackoverflow.com/questions/12598242/global-variables-in-packages-in-r)
-- [How namespaces works](http://r-pkgs.had.co.nz/namespace.html)
-- [How Roxygen helps with namespaces](http://kbroman.org/pkg_primer/pages/depends.html)
-- [How to use Roxygen2](https://github.com/yihui/roxygen2)
-- [R package with CRAN and Bioconductor dependencies](https://stackoverflow.com/questions/34617306/r-package-with-cran-and-bioconductor-dependencies)
+* [How to use global variables in `R`](https://stackoverflow.com/questions/12598242/global-variables-in-packages-in-r)
+* [How namespaces works](http://r-pkgs.had.co.nz/namespace.html)
+* [How Roxygen helps with namespaces](http://kbroman.org/pkg_primer/pages/depends.html)
+* [How to use Roxygen2](https://github.com/yihui/roxygen2)
+* [R package with CRAN and Bioconductor dependencies](https://stackoverflow.com/questions/34617306/r-package-with-cran-and-bioconductor-dependencies)
 
-# Git Setup
+## Git Setup
 
-This repo knows two origins:
+Dev comment: this repo knows two origins:
 
 ```bash
 # From https://stackoverflow.com/questions/14290113/git-pushing-code-to-two-remotes
-git remote set-url --add --push origin git@github.com:paulklemm/snrgo.git
+git remote set-url --add --push origin git@github.com:snr-vis/snrgo.git
 git remote set-url --add --push origin git@github.sf.mpg.de:pklemm/sonargo.git
 # Check with `git remote show origin`
 ```
-
-This is neccessary since the `R` devtools allow for easy installation of packages on Github.com.
