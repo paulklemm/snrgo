@@ -89,7 +89,12 @@ get_ensembl_data <- function(type='gene_and_go', ensembl_dataset='mmusculus_gene
   # If any of the files do not exist, download all of them again
   if (!file.exists(ensembl_path_genes) || !file.exists(ensembl_path_transcripts) || !file.exists(ensembl_path_go)) {
     # Get the biomart
-    ensembl <- useEnsembl(biomart="ensembl", dataset=ensembl_dataset, version=version)
+    # QuickFIX: The current biomart Build (2018-03-10) crashes when you specify a archived version. Therefore, when we use a current version, leave the tag out
+    if (version == get_current_ensembl_version()) {
+      ensembl <- useEnsembl(biomart="ensembl", dataset=ensembl_dataset)
+    } else {
+      ensembl <- useEnsembl(biomart="ensembl", dataset=ensembl_dataset, version=version)
+    }
     # Genes
     gene_and_go <- getBM(attributes=c('ensembl_gene_id', 'go_id'), mart = ensembl)
     # Transcripts
