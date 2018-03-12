@@ -9,7 +9,6 @@
   * [Running Roxygen](#running-roxygen)
   * [Bioconductor Dependency](#bioconductor-dependency)
   * [Relavant Posts and Information](#relavant-posts-and-information)
-  * [Git Setup](#git-setup)
 
 <!-- /TOC -->
 
@@ -89,14 +88,3 @@ RUN Rscript -e "setRepositories(ind=c(1,2)); devtools::install_github('paulklemm
 * [How Roxygen helps with namespaces](http://kbroman.org/pkg_primer/pages/depends.html)
 * [How to use Roxygen2](https://github.com/yihui/roxygen2)
 * [R package with CRAN and Bioconductor dependencies](https://stackoverflow.com/questions/34617306/r-package-with-cran-and-bioconductor-dependencies)
-
-## Git Setup
-
-Dev comment: this repo knows two origins:
-
-```bash
-# From https://stackoverflow.com/questions/14290113/git-pushing-code-to-two-remotes
-git remote set-url --add --push origin git@github.com:snr-vis/snrgo.git
-git remote set-url --add --push origin git@github.sf.mpg.de:pklemm/sonargo.git
-# Check with `git remote show origin`
-```
